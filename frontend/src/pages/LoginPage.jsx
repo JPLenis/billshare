@@ -1,35 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import API from '../api/axios';
 
-export default function DashboardPage() {
-  const [bills, setBills] = useState([]);
-  const [form, setForm] = useState({
-    totalAmount: '',
-    splitBetween: '',
-    description: '',
-    names: ''
-  });
-  const [showOnlyUnpaid, setShowOnlyUnpaid] = useState(false);
-
-  const user = JSON.parse(localStorage.getItem('user'));
-
-  useEffect(() => {
-    API.get('/bills').then(res => setBills(res.data)).catch(console.error);
-  }, []);
+export default function LoginPage() {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const billPayload = {
-        ...form,
-        names: form.names.split(',').map(n => n.trim())
-      };
-      const res = await API.post('/bills', billPayload);
-      setBills([...bills, res.data]);
-      setForm({ totalAmount: '', splitBetween: '', description: '', names: '' });
+      const res = await API.post('/auth/login', form);
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user)); // ✅ Store user with name
+      navigate('/dashboard');
     } catch (err) {
-      alert('Error creating bill');
+      alert(err.response?.data?.message || 'Login failed');
     }
   };
+
+  return (
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>BillShare</h1>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input name="email" placeholder="Email" onChange={handleChange} required />
+        <br />
+        <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+        <br />
+        <button type="submit">Login</button>
+      </form>
+
+      <p style={{ marginTop: '1rem' }}>
+        Don't have an account?{" "}
+        <Link to="/register">
+          <button>Register</button>
+        </Link>
+      </p>
+    </div>
+  );
+}

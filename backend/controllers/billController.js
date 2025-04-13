@@ -1,13 +1,16 @@
 const Bill = require("../models/Bill");
 
 exports.createBill = async (req, res) => {
-  const { totalAmount, splitBetween, description } = req.body;
+  const { totalAmount, splitBetween, description, dueDate, names, paidStatus } = req.body;
   try {
     const bill = new Bill({
       owner: req.user.id,
       totalAmount,
       splitBetween,
       description,
+      dueDate,
+      names,
+      paidStatus,
     });
     await bill.save();
     res.status(201).json(bill);
