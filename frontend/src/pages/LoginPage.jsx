@@ -13,6 +13,7 @@ export default function LoginPage() {
     try {
       const res = await API.post('/auth/login', form);
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user)); // ✅ Store user with name
       navigate('/dashboard');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
@@ -20,7 +21,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>BillShare</h1>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input name="email" placeholder="Email" onChange={handleChange} required />
