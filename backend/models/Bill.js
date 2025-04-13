@@ -5,6 +5,7 @@ const billSchema = new mongoose.Schema({
   totalAmount: Number,
   splitBetween: Number,
   description: String,
+  paid: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

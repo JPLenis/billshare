@@ -36,6 +36,8 @@ export default function DashboardPage() {
         {bills.map(b => (
           <li key={b._id}>
             {b.description} — ${b.totalAmount} split by {b.splitBetween}
+            <br />
+            Paid: <input type="checkbox" checked={b.paid} readOnly />
           </li>
         ))}
       </ul>
