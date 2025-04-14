@@ -31,11 +31,6 @@ stages:
       displayName: 'Install dependencies'
 
     - script: |
-        npm run build || echo "No build script defined, continuing"
-      workingDirectory: ./backend
-      displayName: 'Build the project'
-
-    - script: |
         npm install --save-dev jest
         npx jest --coverage || echo "No tests found"
       workingDirectory: ./backend
