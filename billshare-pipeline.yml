@@ -4,17 +4,19 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Default  
 
 variables:
   nodeVersion: '18.x'
 
 stages:
-# 🏗️ CI Stage: Build & Test
+# CI Stage: Build & Test
 - stage: Build
   displayName: 'Build and Test'
   jobs:
   - job: BuildAndTest
+    pool:
+      name: Default
     steps:
     - task: NodeTool@0
       inputs:
@@ -50,6 +52,8 @@ stages:
   dependsOn: Build
   jobs:
   - job: Deliver
+    pool:
+      name: Default
     steps:
     - script: echo "Delivering build artifact..."
       displayName: 'Deliver Build'
@@ -60,6 +64,8 @@ stages:
   dependsOn: Deliver
   jobs:
   - job: Dev
+    pool:
+      name: Default
     steps:
     - script: |
         echo "Launching app on port 5000 (simulated)"
@@ -72,6 +78,8 @@ stages:
   dependsOn: DeployDev
   jobs:
   - job: QAT
+    pool:
+      name: Default
     steps:
     - script: echo "Mock deploy to QAT environment"
       displayName: 'QAT deploy'
@@ -82,6 +90,8 @@ stages:
   dependsOn: DeployQAT
   jobs:
   - job: Staging
+    pool:
+      name: Default
     steps:
     - script: echo "Mock deploy to Staging environment"
       displayName: 'Staging deploy'
@@ -92,6 +102,8 @@ stages:
   dependsOn: DeployStaging
   jobs:
   - job: Prod
+    pool:
+      name: Default
     steps:
     - script: echo "Mock deploy to Production environment"
       displayName: 'Production deploy'
